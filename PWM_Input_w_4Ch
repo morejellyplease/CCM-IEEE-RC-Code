@@ -1,0 +1,62 @@
+byte PWM_PIN1 = 3;
+byte PWM_PIN2 = 6;
+byte PWM_PIN3 = 5;
+byte PWM_PIN4 = 10;
+
+int pwm_value1;
+int pwm_value2;
+int pwm_value3;
+int pwm_value4;
+
+#include <Servo.h>  
+
+Servo name_servo;
+
+float servo_position = 0; //set initial servo position to 0 degrees
+float channelValue = 0;
+
+ 
+void setup() {
+  pinMode(PWM_PIN1, INPUT);
+  pinMode(PWM_PIN2, INPUT);
+  pinMode(PWM_PIN3, INPUT);
+  pinMode(PWM_PIN4, INPUT);
+
+  name_servo.attach(9);  //assign the input of the servo to pin 9, also attach the signal wire (orange or yellow) to pin 9
+  
+  Serial.begin(9600);
+}
+ 
+void loop() {
+  pwm_value1 = pulseIn(PWM_PIN1, HIGH);
+  pwm_value2 = pulseIn(PWM_PIN2, HIGH);
+  pwm_value3 = pulseIn(PWM_PIN3, HIGH);
+  pwm_value4 = pulseIn(PWM_PIN4, HIGH);
+
+//int channelValue = pwm_value1;
+channelValue = pwm_value2 - 990;
+Serial.println("channelValue:");
+Serial.println(channelValue);
+servo_position = channelValue * (180.0/1000.0);
+Serial.println("servo_position:");
+Serial.println(servo_position);
+name_servo.write(servo_position);  //set the converted number from the potentiometer to the degree of the servo
+    delay(5);  //have a delay of 20 milliseconds so the arduino has time to process changes in the pot
+    
+  Serial.println("Channel 1:");
+  Serial.println(pwm_value1);
+  /*Serial.println("Channel 2:");
+  Serial.println(pwm_value2);
+  Serial.println("Channel 3:");
+  Serial.println(pwm_value3);
+  Serial.println("Channel 4:");
+  Serial.println(pwm_value4);*/
+  delay(20);
+}
+
+
+  /*float servo_position = pwm_value - 990;
+  servo_position = pwm_value * (180.0 / 1000.0);  //can't have an angle of 1024 so convert to number 0-180 using proportions
+  name_servo.write(servo_position);  //set the converted number from the potentiometer to the degree of the servo
+    delay(10);  //have a delay of 20 milliseconds so the arduino has time to process changes in the pot
+}*/
